@@ -12,6 +12,54 @@ It is the original implementation of paper A Multi-Scale Model for Simulating Li
  - Cohesion effects between the hairs
  - Coupling between the hairs and liquid, including dragging, capturing and dripping effect.
 
+Paper Errata
+--------------------
+The following corrections apply to Section 3.1 of *A Multi-Scale Model for Simulating Liquid-Hair Interactions*. We thank [Sofia Iannicelli](https://www.sofiaiannicelli.org/) for identifying these issues and independently confirming the corrected energy derivative.
+
+**Interface lengths and surface energy (Eqs. (1)--(4)).** The solid interface lengths $l_S$, $l_{S1}$, and $l_{S2}$ should refer to the **hair-liquid (solid-liquid)** boundary, rather than the hair-air boundary. With this convention, Young's equation gives the cross-sectional surface energy per unit hair length as
+
+$$
+E = \sigma \left(l_{\mathrm{liquid-air}} - \cos\theta\,l_{\mathrm{solid-liquid}}\right) + \mathrm{const}.
+$$
+
+The additive constant is independent of the hair separation. Accordingly, the solid-interface terms in Eqs. (1) and (2) must have **minus** signs. With $l_A$ denoting the total liquid-air interface length, the corrected equations are
+
+$$
+dE_s = \sigma \left[l_A(s) - \cos\theta\,l_S(s)\right]\,ds,
+$$
+
+$$
+dE_s = \sigma \left[l_A(s) - \cos\theta_1\,l_{S1}(s) - \cos\theta_2\,l_{S2}(s)\right]\,ds.
+$$
+
+Equation (3), as printed, gives the length of only one meniscus. To include both the upper and lower menisci, the total liquid-air interface length is
+
+$$
+l_A(s) = 2R\left[\pi - (\theta_1 + \alpha_1 + \theta_2 + \alpha_2)\right].
+$$
+
+Equivalently, if $l_A$ retains the single-meniscus definition printed in Eq. (3), its contribution to the energy must be $2l_A$. The solid-liquid interface length replacing Eq. (4) is
+
+$$
+l_{Si}(s) = 2r_i\alpha_i,\qquad i=1,2,
+$$
+
+without the printed $\pi-\alpha_i$. For identical hairs, with $r_1=r_2=r$, $\alpha_1=\alpha_2=\alpha$, and $\theta_1=\theta_2=\theta$, these corrections give
+
+$$
+E = \sigma\left[2R(\pi-2\theta-2\alpha) - 4r\alpha\cos\theta\right] + \mathrm{const}.
+$$
+
+Differentiating this energy with respect to separation at fixed liquid cross-sectional area $A_L$, as in Eqs. (7)--(8), agrees with `CohesionTable::computedEdd` in [libWetHair/CohesionTableGen.cpp](libWetHair/CohesionTableGen.cpp). The implemented hair-hair energy derivative already incorporates these corrections.
+
+**Distance convention (Eq. (5) and Fig. 5).** Equation (5) as printed gives the surface-to-surface gap, whereas Fig. 5 and the remainder of the paper use the center-to-center distance. The equation for the center-to-center distance is
+
+$$
+d = R\sum_{i=1,2}\cos(\theta_i+\alpha_i) + \sum_{i=1,2}r_i\cos\alpha_i.
+$$
+
+This is the printed Eq. (5) plus $r_1+r_2$. For fixed hair radii, the two distance conventions differ only by a constant, so the energy derivative is unchanged. The implementation uses the center-to-center convention: `CohesionTable::computeR` rearranges $d=2R\cos(\theta+\alpha)+2r\cos\alpha$ to solve for $R$.
+
 Dependencies
 --------------------
 libWetHair has several dependencies and by default it will fetch them through CMake's `FetchContent`. Please make sure your internet is smooth before the first time of configuration.
@@ -81,14 +129,17 @@ Contact
 -----------
 Please contact the author (yf2320@columbia.edu) for questions and bug report, or consulting for the usage of this code base.
 
-BibTex Citation
+BibTeX Citation
 ----------------------
-  @article{Fei:2017:liquidhair,
-    title={A Multi-Scale Model for Simulating Liquid-Hair Interactions},
-    author={Fei, Yun (Raymond) and Maia, Henrique Teles and Batty, Christopher and Zheng, Changxi and Grinspun, Eitan},
-    journal={ACM Trans. Graph.},
-    volume={36},
-    number={4},
-    year={2017},
-    doi={10.1145/3072959.3073630},
-  }
+
+```bibtex
+@article{Fei:2017:liquidhair,
+  title={A Multi-Scale Model for Simulating Liquid-Hair Interactions},
+  author={Fei, Yun (Raymond) and Maia, Henrique Teles and Batty, Christopher and Zheng, Changxi and Grinspun, Eitan},
+  journal={ACM Trans. Graph.},
+  volume={36},
+  number={4},
+  year={2017},
+  doi={10.1145/3072959.3073630},
+}
+```
