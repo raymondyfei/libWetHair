@@ -19,17 +19,17 @@ The following corrections apply to Section 3.1 of *A Multi-Scale Model for Simul
 **Interface lengths and surface energy (Eqs. (1)--(4)).** The solid interface lengths $l_S$, $l_{S1}$, and $l_{S2}$ should refer to the **hair-liquid (solid-liquid)** boundary, rather than the hair-air boundary. With this convention, Young's equation gives the cross-sectional surface energy per unit hair length as
 
 $$
-E = \sigma \left(l_{\mathrm{liquid-air}} - \cos\theta\,l_{\mathrm{solid-liquid}}\right) + \mathrm{const}.
+E = \sigma \left(l_{\mathrm{liquid-air}} - \cos(\theta) l_{\mathrm{solid-liquid}}\right) + \mathrm{const}.
 $$
 
 The additive constant is independent of the hair separation. Accordingly, the solid-interface terms in Eqs. (1) and (2) must have **minus** signs. With $l_A$ denoting the total liquid-air interface length, the corrected equations are
 
 $$
-dE_s = \sigma \left[l_A(s) - \cos\theta\,l_S(s)\right]\,ds,
+dE_s = \sigma \left[l_A(s) - \cos(\theta) l_S(s)\right] ds,
 $$
 
 $$
-dE_s = \sigma \left[l_A(s) - \cos\theta_1\,l_{S1}(s) - \cos\theta_2\,l_{S2}(s)\right]\,ds.
+dE_s = \sigma \left[l_A(s) - \cos(\theta_1) l_{S1}(s) - \cos(\theta_2) l_{S2}(s)\right] ds.
 $$
 
 Equation (3), as printed, gives the length of only one meniscus. To include both the upper and lower menisci, the total liquid-air interface length is
@@ -47,7 +47,7 @@ $$
 without the printed $\pi-\alpha_i$. For identical hairs, with $r_1=r_2=r$, $\alpha_1=\alpha_2=\alpha$, and $\theta_1=\theta_2=\theta$, these corrections give
 
 $$
-E = \sigma\left[2R(\pi-2\theta-2\alpha) - 4r\alpha\cos\theta\right] + \mathrm{const}.
+E = \sigma\left[2R(\pi-2\theta-2\alpha) - 4r\alpha\cos(\theta)\right] + \mathrm{const}.
 $$
 
 Differentiating this energy with respect to separation at fixed liquid cross-sectional area $A_L$, as in Eqs. (7)--(8), agrees with `CohesionTable::computedEdd` in [libWetHair/CohesionTableGen.cpp](libWetHair/CohesionTableGen.cpp). The implemented hair-hair energy derivative already incorporates these corrections.
